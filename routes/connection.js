@@ -4,6 +4,7 @@ var router = express.Router();
 const locationURL = 'https://rest.gohighlevel.com/v1/locations/';
 const calendarURL = 'https://rest.gohighlevel.com/v1/calendars/teams';
 const gohighlevelBearerToken = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhdGlvbl9pZCI6Imo4ZVdaU2ZObndSUUhkakxkVkN2IiwiY29tcGFueV9pZCI6IkJrUzZTUTF2T0k3NmQxU2ZvaW42IiwidmVyc2lvbiI6MSwiaWF0IjoxNjQ2OTgwNTMxNzk1LCJzdWIiOiJJTVhLUENlRndNQXlVNUc3TmV5TSJ9.JO8_nFUPZwyVnEd46lerAr909TXte-X4Di9iOdGq99M';
+const apptURL = 'https://api.leadconnectorhq.com';
 
 router.post('/', function(req, res, next) {
   var intent = req.body.queryResult.intent.displayName;
@@ -27,7 +28,7 @@ router.post('/', function(req, res, next) {
     axios.get(calendarURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(aRes => {
       let apptLink = aRes.data.teams[0].calendarConfig.link;
   
-      let textResponse = `The link to make an appointment is https://api.leadconnectorhq.com${apptLink}.`;
+      let textResponse = `The link to make an appointment is ${apptURL}${apptLink}.`;
       res.send(createTextResponse(textResponse));
   
     }).catch(err => {
