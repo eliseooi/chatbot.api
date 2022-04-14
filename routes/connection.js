@@ -27,7 +27,7 @@ router.post('/', function(req, res, next) {
     axios.get(calendarURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(aRes => {
       let apptLink = aRes.data.teams[0].calendarConfig.link;
   
-      let textResponse = `The link to make an appointment is ${apptLink}.`;
+      let textResponse = `The link to make an appointment is https://api.leadconnectorhq.com${apptLink}.`;
       res.send(createTextResponse(textResponse));
   
     }).catch(err => {
@@ -36,21 +36,6 @@ router.post('/', function(req, res, next) {
   }
 
 });
-
-// router.post('/', function(req, res, next) {
-
-//   axios.get(calendarURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(aRes => {
-//     let apptLink = aRes.data.teams[0].calendarConfig.link;
-
-//     let textResponse = `The link to make an appointment is ${apptLink}.`;
-//     res.send(createTextResponse(textResponse));
-
-//   }).catch(err => {
-//     console.log(err);
-//   })
-
-// });
-
 
 function createTextResponse(textResponse){
   let response = {
