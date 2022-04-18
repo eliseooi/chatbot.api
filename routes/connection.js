@@ -36,6 +36,20 @@ router.post('/', function(req, res, next) {
     })
   }
 
+  else if (intent == "contactInfo"){
+    axios.get(locationURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(aRes => {
+      let phoneNumber = aRes.data.locations[0].phone;
+      let email = aRes.data.locations[0].email;
+      let website = aRes.data.locations[0].website;
+  
+      let textResponse = `Our website is ${website}, you can reach us at ${phoneNumber} or ${email}.`;
+      res.send(createTextResponse(textResponse));
+  
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
 });
 
 function createTextResponse(textResponse){
