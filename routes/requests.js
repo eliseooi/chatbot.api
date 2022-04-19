@@ -40,10 +40,10 @@ router.post('/', function(req, res) {
   }
 
   else if (intent == "contactInfo"){
-    axios.get(locationURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(aRes => {
-      let phoneNumber = aRes.data.locations[0].phone;
-      let email = aRes.data.locations[0].email;
-      let website = aRes.data.locations[0].website;
+    axios.get(locationURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(res => {
+      let phoneNumber = res.data.locations[0].phone;
+      let email = res.data.locations[0].email;
+      let website = res.data.locations[0].website;
   
       let textResponse = `Our website is ${website}, you can reach us at ${phoneNumber} or ${email}.`;
       res.send(createTextResponse(textResponse));
@@ -58,10 +58,14 @@ router.post('/', function(req, res) {
     var age = req.body.queryResult.parameters["age"];
     var phoneNumber = req.body.queryResult.parameters["phone-number"];
     var email = req.body.queryResult.parameters["email"];
+    var data = `{\n "name": ${studentName}, \n "phone": ${phoneNumber} }`;
 
-    axios.post("https://rest.gohighlevel.com/v1/contacts/",{ headers: { 'Authorization': gohighlevelBearerToken} }).then(aRes => {
-      let data = aRes.data;
-      console.log(data);
+    axios.post("https://rest.gohighlevel.com/v1/contacts/", req_data,{ 
+      headers: { 'Authorization': gohighlevelBearerToken},
+
+    }).
+    then(res => {
+      console.log('res',res.data);
   
     }).catch(err => {
       console.log(err);
