@@ -1,12 +1,12 @@
-var express = require('express');
-var axios = require('axios');
-var router = express.Router();
+const express = require('express');
+const axios = require('axios');
+const router = express.Router();
 const locationURL = 'https://rest.gohighlevel.com/v1/locations/';
 const calendarURL = 'https://rest.gohighlevel.com/v1/calendars/teams';
 const gohighlevelBearerToken = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhdGlvbl9pZCI6Imo4ZVdaU2ZObndSUUhkakxkVkN2IiwiY29tcGFueV9pZCI6IkJrUzZTUTF2T0k3NmQxU2ZvaW42IiwidmVyc2lvbiI6MSwiaWF0IjoxNjQ2OTgwNTMxNzk1LCJzdWIiOiJJTVhLUENlRndNQXlVNUc3TmV5TSJ9.JO8_nFUPZwyVnEd46lerAr909TXte-X4Di9iOdGq99M';
-const apptURL = 'https://api.leadconnectorhq.com';
+const apptBaseURL = 'https://api.leadconnectorhq.com';
 
-router.post('/', function(req, res, next) {
+router.post('/', function(req, res) {
   var intent = req.body.queryResult.intent.displayName;
 
   if (intent == "locationInfo"){
@@ -25,10 +25,13 @@ router.post('/', function(req, res, next) {
   }
 
   else if (intent == "testIntent"){
+    const querystring = require('querystring');
     axios.get(calendarURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(aRes => {
       let apptLink = aRes.data.teams[0].calendarConfig.link;
+      //let apptURL = apptBaseURL + apptLink;
+      let url = new URL (apptBaseURL + apptLink)
   
-      let textResponse = `The link to make an appointment is ${apptURL}${apptLink}.`;
+      let textResponse = `The link to make an appointment is ${url}.`;
       res.send(createTextResponse(textResponse));
   
     }).catch(err => {
@@ -50,7 +53,24 @@ router.post('/', function(req, res, next) {
     })
   }
 
+  else if (intent == 'matchLessonType'){
+    var studentName = req.body.queryResult.parameters["Person"];
+    var age = req.body.queryResult.parameters["age"];
+    var phoneNumber = req.body.queryResult.parameters["phone-number"];
+    var email = req.body.queryResult.parameters["email"];
+
+    axios.post("https://rest.gohighlevel.com/v1/contacts/",{ headers: { 'Authorization': gohighlevelBearerToken} }).then(aRes => {
+      let data = aRes.data;
+      console.log(data);
+  
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
 });
+
+
 
 function createTextResponse(textResponse){
   let response = {
