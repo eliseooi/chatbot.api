@@ -10,11 +10,11 @@ router.post('/', function(req, res) {
   var intent = req.body.queryResult.intent.displayName;
 
   if (intent == "locationInfo"){
-    axios.get(locationURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(aRes => {
-      let address = aRes.data.locations[0].address;
-      let city = aRes.data.locations[0].city;
-      let state = aRes.data.locations[0].state;
-      let country = aRes.data.locations[0].country;
+    axios.get(locationURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(res => {
+      let address = res.data.locations[0].address;
+      let city = res.data.locations[0].city;
+      let state = res.data.locations[0].state;
+      let country = res.data.locations[0].country;
   
       let textResponse = `The studio is located at ${address}, ${city}, ${state}, ${country}.`;
       res.send(createTextResponse(textResponse));
@@ -26,8 +26,8 @@ router.post('/', function(req, res) {
 
   else if (intent == "testIntent"){
     const querystring = require('querystring');
-    axios.get(calendarURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(aRes => {
-      let apptLink = aRes.data.teams[0].calendarConfig.link;
+    axios.get(calendarURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(res => {
+      let apptLink = res.data.teams[0].calendarConfig.link;
       //let apptURL = apptBaseURL + apptLink;
       let url = new URL (apptBaseURL + apptLink)
   
