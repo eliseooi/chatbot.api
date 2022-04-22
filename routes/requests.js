@@ -10,11 +10,11 @@ router.post('/', function(req, res) {
   var intent = req.body.queryResult.intent.displayName;
 
   if (intent == "locationInfo"){
-    axios.get(locationURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(res => {
-      let address = res.data.locations[0].address;
-      let city = res.data.locations[0].city;
-      let state = res.data.locations[0].state;
-      let country = res.data.locations[0].country;
+    axios.get(locationURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(aRes => {
+      let address = aRes.data.locations[0].address;
+      let city = aRes.data.locations[0].city;
+      let state = aRes.data.locations[0].state;
+      let country = aRes.data.locations[0].country;
   
       let textResponse = `The studio is located at ${address}, ${city}, ${state}, ${country}.`;
       res.send(createTextResponse(textResponse));
@@ -24,10 +24,9 @@ router.post('/', function(req, res) {
     })
   }
 
-  else if (intent == "testIntent"){
-    const querystring = require('querystring');
-    axios.get(calendarURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(res => {
-      let apptLink = res.data.teams[0].calendarConfig.link;
+  else if (intent == "scheduleAppointment"){
+    axios.get(calendarURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(aRes => {
+      let apptLink = aRes.data.teams[0].calendarConfig.link;
       //let apptURL = apptBaseURL + apptLink;
       let url = new URL (apptBaseURL + apptLink)
   
@@ -40,10 +39,10 @@ router.post('/', function(req, res) {
   }
 
   else if (intent == "contactInfo"){
-    axios.get(locationURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(res => {
-      let phoneNumber = res.data.locations[0].phone;
-      let email = res.data.locations[0].email;
-      let website = res.data.locations[0].website;
+    axios.get(locationURL,{ headers: { 'Authorization': gohighlevelBearerToken} }).then(aRes => {
+      let phoneNumber = aRes.data.locations[0].phone;
+      let email = aRes.data.locations[0].email;
+      let website = aRes.data.locations[0].website;
   
       let textResponse = `Our website is ${website}, you can reach us at ${phoneNumber} or ${email}.`;
       res.send(createTextResponse(textResponse));
@@ -53,24 +52,24 @@ router.post('/', function(req, res) {
     })
   }
 
-  else if (intent == 'matchLessonType'){
-    var studentName = req.body.queryResult.parameters["Person"];
-    var age = req.body.queryResult.parameters["age"];
-    var phoneNumber = req.body.queryResult.parameters["phone-number"];
-    var email = req.body.queryResult.parameters["email"];
-    var data = `{\n "name": ${studentName}, \n "phone": ${phoneNumber} }`;
+  // else if (intent == 'matchLessonType'){
+  //   var studentName = req.body.queryResult.parameters["Person"];
+  //   var age = req.body.queryResult.parameters["age"];
+  //   var phoneNumber = req.body.queryResult.parameters["phone-number"];
+  //   var email = req.body.queryResult.parameters["email"];
+  //   var data = `{\n "name": ${studentName}, \n "phone": ${phoneNumber} }`;
 
-    axios.post("https://rest.gohighlevel.com/v1/contacts/", req_data,{ 
-      headers: { 'Authorization': gohighlevelBearerToken},
+  //   axios.post("https://rest.gohighlevel.com/v1/contacts/", req_data,{ 
+  //     headers: { 'Authorization': gohighlevelBearerToken},
 
-    }).
-    then(res => {
-      console.log('res',res.data);
+  //   }).
+  //   then(res => {
+  //     console.log('res',res.data);
   
-    }).catch(err => {
-      console.log(err);
-    })
-  }
+  //   }).catch(err => {
+  //     console.log(err);
+  //   })
+  // }
 
 });
 
